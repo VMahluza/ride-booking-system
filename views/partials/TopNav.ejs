@@ -40,7 +40,14 @@
         <span class="icon"><i class="mdi mdi-car-wash"></i></span>
         <span>Number of Ride requests today - <strong>(<span id="numberOfRideRequestToday"><%= numberOfRideRequestToday %></span>)</strong></span>
         <% } %>
+
+
       </h1>
+      <button onclick="showAddLocationForm()" class="button is-primary" style="margin: 10px;"
+      class="navbar-item has-divider is-desktop-icon-only">
+      <span class="icon"><i class="mdi mdi-car-wash"></i> </span>
+      <span>Add a Location</span>
+      </button>
         <div class="navbar-item has-dropdown has-dropdown-with-icons has-divider is-hoverable">
           
           <div class="navbar-dropdown">
@@ -99,3 +106,89 @@
       </div>
     </div>
   </nav>
+  <script>
+    // your_script.js
+
+function showAddLocationForm() {
+  Swal.fire({
+    title: 'Add Location',
+    html:
+      `<form id="addLocationForm">
+        <div class="field">
+          <label class="label">Name</label>
+          <div class="control">
+            <input class="input" type="text" id="name" required>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Address Line 1</label>
+          <div class="control">
+            <input class="input" type="text" id="addressLine1" required>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Address Line 2</label>
+          <div class="control">
+            <input class="input" type="text" id="addressLine2">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Town/City</label>
+          <div class="control">
+            <input class="input" type="text" id="townCity" required>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Province</label>
+          <div class="control">
+            <input class="input" type="text" id="province" required>
+          </div>
+        </div>
+      </form>`,
+    showCancelButton: true,
+    confirmButtonText: 'Add',
+    cancelButtonText: 'Cancel',
+    preConfirm: () => {
+      const formData = {
+        name: document.getElementById('name').value,
+        addressline1: document.getElementById('addressLine1').value,
+        addressline2: document.getElementById('addressLine2').value,
+        town_city: document.getElementById('townCity').value,
+        province: document.getElementById('province').value,
+        // latitude: parseFloat(document.getElementById('latitude').value),
+        // longitude: parseFloat(document.getElementById('longitude').value),
+      };
+
+      // Submit the form data to the server using Fetch API
+      return fetch('/api/locations/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Handle the server response
+        Swal.fire('Location Added', 'The location has been successfully added.', 'success');
+        
+        setTimeout(
+          ()=>{window.location.reload()},
+          2000
+        )
+        
+      })
+      .catch(error => {
+        Swal.fire('Error', 'An error occurred while adding the location.', 'error');
+        console.error('Error:', error);
+      });
+    },
+  });
+}
+
+  </script>
