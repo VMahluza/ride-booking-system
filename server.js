@@ -51,7 +51,7 @@ var authRouterLogin = require('./routes/login');
 
 let adminUser = {
   id : 1,
-  drivercode : 'USER100',
+  drivercode : 'USER101',
   name: 'Cab ',
   surname: 'TeJayy',
   usertype:userTypes.admin,

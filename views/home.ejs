@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Profile - Admin</title>
+  <title>Home</title>
 
   <!-- Fonts -->
   <link rel="dns-prefetch" href="https://fonts.gstatic.com">
@@ -24,7 +24,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data.message); 
+          console.log(data.message); 
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -326,11 +326,11 @@
                         </td>
                         <td class="is-actions-cell">
                             <div class="buttons is-right">
-                                <button class="button is-small is-primary"
+                                <!-- <button class="button is-small is-primary"
                                     type="button">
                                     <span class="icon"><i
                                             class="mdi mdi-eye"></i></span>
-                                </button>
+                                </button> -->
                                 <button class="button is-small is-danger"
                                     onclick="deleteRideConfirmation('<%= UserRideRequests[i].id %>')" type="button">
                                     <span class="icon"><i
@@ -343,40 +343,54 @@
                     <script>
 
                       const deleteRideConfirmation = (id) => {
-                      console.log("Ride ID: " + id);   
-                                                        fetch(`/api/ride-request/delete/${id}`, {
-                                                            method: 'GET',
-                                                            headers: {
-                                                                'Content-Type': 'application/json',
-                                                                // You might need to include additional headers here if required
-                                                            },
-                                                        })
-                                                    .then(response => {
-                            
 
-                                                        if (!response.ok) {
-                                                            throw new Error('Network response was not ok');
-                                                        }
-                                                        return response.json();
-                                                    })
-                                                    .then(data => {
-                                                        // Handle success
-                                                        Swal.fire(
-                                                            'Deleted!',
-                                                            'Ride Request Canceled.',
-                                                            'success'
-                                                        );
-                                                    })
-                                                    .catch(error => {
-                                                        // Handle error
-                                                        console.error('There was a problem with the fetch operation:', error);
-                                                        Swal.fire(
-                                                            'Error!',
-                                                            'There was an error Cancelling your Ride Request.',
-                                                            'error'
-                                                        );
-                                                    });
-                                                        }
+
+                        Swal.fire({
+                          title: 'Are you sure?',
+                          text: 'You won\'t be able to revert this!',
+                          icon: 'warning',
+                          showCancelButton: true,
+                          confirmButtonColor: '#3085d6',
+                          cancelButtonColor: '#d33',
+                          confirmButtonText: 'Yes, delete',
+                          cancelButtonText: 'Cancel'
+                        }).then((result) => {
+                          if (result.isConfirmed) {
+                            // User clicked "Yes, delete"
+                            // Perform your delete operation here
+                            Swal.fire('Deleted!', 'Your item has been deleted.', 'success');
+
+                            setTimeout(()=> {console.log('Now deleting Ride!')}, 2000)
+                            fetch(
+                              `/api/ride-request/delete/${id}`, 
+                              {
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    // You might need to include additional headers here if required
+                                },
+                              }).then(response => {
+                                  if (!response.ok) {
+                                      throw new Error('Network response was not ok');
+                                  }
+                                  return response.json();
+                              }).catch(error => {
+                                  // Handle error
+                                  console.error('There was a problem with the fetch operation:', error);
+                                  Swal.fire(
+                                      'Error!',
+                                      'There was an error Cancelling your Ride Request.',
+                                      'error'
+                                  );
+                              });
+                              window.location.reload()
+
+                          }
+                        });
+
+                      
+
+                                                              }
                                                     
                     </script>
                     <% } %>
