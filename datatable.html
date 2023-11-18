@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+
+    <script>
+        // When document is ready convert to datatable $(document).ready(function () { $('#example').DataTable(); });
+        $(document).ready(function () { $('#example').DataTable()})
+        </script>
+        <!-- Make a simple table -->
+        
+        <table id="example" class="display">       
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Condition</th>
+                    <th>Status</th>
+                    <th>Driver Code</th>
+                    <th>Plate</th>
+                    <th>Seats</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Dummy Data -->
+                  <tr>
+                    <td>1</td>
+                    <td>Toyota Camry</td>
+                    <td>Good</td>
+                    <td>Available</td>
+                    <td>DRV001</td>
+                    <td>ABC123</td>
+                    <td>5</td>
+                  </tr>
+                  <!-- Add more rows as needed -->
+                  <tr>
+                    <td>2</td>
+                    <td>Honda Accord</td>
+                    <td>Excellent</td>
+                    <td>Booked</td>
+                    <td>DRV002</td>
+                    <td>XYZ789</td>
+                    <td>4</td>
+                  </tr>
+                  <!-- ... Add more dummy data rows ... -->
+                </tbody>
+              </table>
+              
+    
+</body>
+</html>

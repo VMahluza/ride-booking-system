@@ -72,34 +72,28 @@
             </a>
             <% } %>
             <hr class="navbar-divider">
-            <a class="navbar-item" href="/logout">
-              <span class="icon"><i class="mdi mdi-logout"></i></span>
-              <span>Log Out</span>
-            </a>
           </div>
         </div>
         <div class="navbar-item has-dropdown has-dropdown-with-icons has-divider has-user-avatar is-hoverable">
-          <a class="navbar-link is-arrowless">
+          <a role="button" onclick="window.location.href='/profile'" class="navbar-link is-arrowless">
             <div class="is-user-avatar">
 
 
               <% if (!user.profileUrl) { %>
               <img src="https://avatars.dicebear.com/v2/initials/john-doe.svg" alt="John Doe">
               <% } else { %>
-                <img src="<%= user.profileUrl %>" alt="John Doe">
+                <img src="<%= user.profileUrl %>">
                 <% } %>
             </div>
-            <div class="is-user-name">
+
+            <div  class="is-user-name">
               <span><%- user.name %> <%- user.surname %>(<%- user.usertype %>)</span>
             </div>
             <span class="icon"><i class="mdi mdi-chevron-down"></i></span>
           </a>
           <% if (user.usertype == "Student") %>
           <div class="navbar-dropdown">
-            <a href="/profile" class="navbar-item is-active">
-              <span class="icon"><i class="mdi mdi-account"></i></span>
-              <span>My Profile</span>
-            </a>
+
             <hr class="navbar-divider">
             
           </div>

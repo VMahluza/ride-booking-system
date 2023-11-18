@@ -4,27 +4,69 @@
       <img src="/images/logo.png">
     </a>
 
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+    <a role="button" onclick="LoginSignUpDialog()" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
     </a>
+    <script>
+      function LoginSignUpDialog() {
+          Swal.fire({
+            
+              didOpen : ()=>{
+                const OkYBtn =  document.querySelector('.swal2-confirm')
+                OkYBtn.style.display = 'none';
+
+                document.getElementById('on_about').addEventListener('click', ()=>{
+                  Swal.close(); 
+                  window.location.href = '/#about_section';
+                });
+                document.getElementById('on_home').addEventListener('click', ()=>{Swal.close();
+                  window.location.href = '/#hero_section';});
+
+              },
+              html: `
+              <a class="navbar-item" href="/">
+      <img src="/images/logo.png">
+    </a>
+              <a style="width:100%" class="button  is-primary" href="auth/register">
+                <strong>Get Started</strong>
+              </a>
+              <br><br> 
+              <a style="width:100%" class="button  is-light" href="auth/login">
+                Log in
+              </a>
+              <br><br>
+              <a id="on_home" style="width:100%" class="button  is-light">
+                Home
+              </a>
+              <br>
+              <a id="on_about" style="width:100%" class="button  is-light">
+                About Us
+              </a>
+     
+              `,
+            
+          });
+      }
+    </script>
   </div>
 
   <div id="navbarBasicExample" class="navbar-menu">
     <div class="navbar-start">
-      <a class="navbar-item">
+      <a href="/#hero_section" class="navbar-item">
         Home
       </a>
-
-      
+      <a href="/#about_section" class="navbar-item">
+        About Us
+      </a>      
     </div>
 
     <div class="navbar-end">
       <div class="navbar-item">
         <div class="buttons">
           <a class="button is-primary" href="auth/register">
-            <strong>Sign up</strong>
+            <strong>Get Started</strong>
           </a>
           <a class="button is-light" href="auth/login">
             Log in

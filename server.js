@@ -315,9 +315,7 @@ app.get("/api/ride-request/accept/:req_id", (req, res) => {
 app.get("/forgot-password", (req, res) => res.render("forgot-password.ejs"));
 app.post("/reset-password", (req, res) => {
   const email = req.body.email;
-
   const foundUser = findUserByEmail(email);
-
   if (foundUser) {
     const message = `Password reset requested for ${email}. Please check your inbox.`;
     const mailOptions = {
@@ -328,18 +326,21 @@ app.post("/reset-password", (req, res) => {
         `Password reset requested for ${email}. ` +
         `Password: ${foundUser.password}`,
     };
-    res.send(message);
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.error(error);
       } else {
         console.log("Email sent: " + info.response);
       }
+      return res.render( 'forgot-password-message', { message: { isError: false, msg : message } } );
     });
   } else {
-    return res.send(`User with email ${email} not found.`);
+    const error = `User with email ${email} not found.`
+    return res.render( 'forgot-password-message', { message: {isError: true, msg : error } } );
   }
 });
+
+
 app.get("/app", (req, res) => res.render("page"));
 app.get("/api/ride-request/opened/:req_id", (req, res) => {
   if (req.session.user) {

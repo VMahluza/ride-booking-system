@@ -10,6 +10,28 @@
       </p>
   </div>
 </footer>
+<script>
+  function showContacts() {
+      Swal.fire({
+          title: 'Get in touch with us',
+          html: `
+              <ul style="list-style-type: none; padding: 0;">
+                  <li><strong>Contacts:</strong> +27 79 931 9671</li>
+                  <li><strong>Other:</strong> +27 72 896 8717</li>
+                  <li><strong>Email:</strong> TheInfiniteTech23@gmail.com</li>
+              </ul>
+          `,
+          icon: 'info',
+          confirmButtonText: 'Close',
+          confirmButtonColor: '#48C774', // Bulma success color
+          showCloseButton: true,
+          customClass: {
+              popup: 'bulma-sw-modal', // Custom class for Bulma styling
+              closeButton: 'bulma-sw-close-button', // Custom class for Bulma styling
+          }
+      });
+  }
+</script>
 
 <%- include('global/endbase.ejs') %>
 

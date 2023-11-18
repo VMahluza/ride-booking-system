@@ -3,7 +3,7 @@
         background-image: url("/images/hero-background.jpg");
         background-size: cover;
         background-position: center center;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: rgba(0, 0, 0, 0.822);
     }
 
     #glass {
@@ -17,7 +17,7 @@
     }
 </style>
 
-<section class="hero is-primary is-fullheight">
+<section id="hero_section" class="hero is-primary is-fullheight">
     <div class="hero-body">
         <div class="container" id="glass">
             <h1 class="title">
@@ -26,22 +26,35 @@
             <h2 class="subtitle">
                 Book a ride with ease and convenience.
             </h2>
-            <div class="map-container">
-                <iframe 
-                    style="border-radius: 8px;"
-                    class="gmap_iframe" 
-                    frameborder="0" 
-                    scrolling="no" 
-                    marginheight="0" 
-                    marginwidth="0" 
-                    src="https://maps.google.com/maps?width=1000&amp;height=800&amp;hl=en&amp;q=University%20of%20Mpumalanga&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
-                    width="400"
-                    height="300" ></iframe>
-                    <br><br>
+            <div class="columns ">
+                <div class="column map-container">
+                    <iframe 
+                        style="border-radius: 8px;"
+                        class="gmap_iframe" 
+                        frameborder="0" 
+                        scrolling="no" 
+                        marginheight="0" 
+                        marginwidth="0" 
+                        src="https://maps.google.com/maps?width=1000&amp;height=800&amp;hl=en&amp;q=University%20of%20Mpumalanga&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+                        width="400"
+                        height="300" ></iframe>
+                        <br><br>
+                </div>
+                <div class="column">
+                    <h1 class="title">
+                        Introduction
+                    </h1>
+                    <p >
+                        Welcome to Infinite Tech, a dynamic force in the realm of technology, where we transcend boundaries and redefine possibilities. Our journey is characterized by a relentless pursuit of innovation that knows no limits.
+                    <p>
+                        <br><br><br>
+                        <a onclick="showContacts()" class="button is-primary is-large is-outlined">
+                            Contact Us
+                        </a>
+                    
+
+                </div>
             </div>
-            <a href="/auth/register" class="button is-rounded is-primary is-large">
-                Get Started
-            </a>
         </div>
     </div>
 </section>
@@ -83,9 +96,7 @@
             <div class="column">
                 <div class="card">
                     <div class="card-image">
-                        <figure class="image">
-                            <!-- <img src="images/vehicle3.jpg" alt="Vehicle 5"> -->
-                        </figure>
+              
                     </div>
                     <div class="card-content">
                         <!-- <p class="title">Nissan NV350</p> -->
@@ -100,17 +111,28 @@
     </div>
 </section>
 
-<section class="hero is-primary is-fullheight">
-    <div class="hero-body">
-        <div class="container" >
+<section id="about_section" class="hero is-primary is-fullheight">
+    <div class="columns hero-body">
+        <div class="column" >
             <h1 class="title">
-                I want to become A Driver
+                Our Mission
             </h1>
-            <h2 class="subtitle">
-                You can register to become a student driver or guest driver
-            </h2>
-            
+            <p>
+                At Infinite Tech, our mission is to pioneer the future of technology by relentlessly pushing boundaries and crafting solutions that inspire change. We strive to lead the way in transformative innovation, offering cutting edge solutions that empower individuals and organizations to thrive in an ever evolving digital landscape.
+
+            </p>
         </div>
+        <article class="column card">
+            <h1 style="color: #00d1b2;" class="title is-primary">
+                Values
+            </h1>
+            <div class="message-body">
+
+            
+                    Our values are the cornerstone of our identity. We are guided by a commitment to excellence, integrity, and collaboration. We believe in fostering an environment that nurtures creativity and embraces diversity. At Infinite Tech, we value not only what we create but also how we create it with passion, curiosity, and a shared dedication to shaping a future where possibilities are infinite.
+                
+            </div>
+        </article>
     </div>
 </section>
 

@@ -206,6 +206,11 @@
       closeModal();
   });
 </script>
+            <article style="display: none;" id="error-card" class="message is-danger">
+              <div class="message-body">
+                  The is no Available Vehicle for the selected Destination
+              </div>
+            </article>
                 <div class="field">
                   <label class="label">Destination(Select from registered locations)</label>
                   <div class="control">
@@ -426,8 +431,14 @@
         if (destination ==='Other'){
           finalDestination = document.getElementById('otherLocationField').innerText;
         }
+        const CarsForThatDestination = avalailabeVehicles.filter(car => car.dest_id === parseInt(finalDestination))
         // Show a confirmation dialog using SweetAlert
-
+        
+        if (CarsForThatDestination.length == 0) {
+                document.getElementById("error-card").style.display = "block"
+              }else {
+                document.getElementById("error-card").style.display = "none"
+      
         Swal.fire({
             title: 'Confirm Requesting Your ride',
             text: `You are about to request a ride from ${pickupLocation} to ${destination.options[destination.selectedIndex].text}\n\nAre you sure you want to Continue?`,
@@ -468,19 +479,18 @@
 
               console.log('Final Destination ID', parseInt(finalDestination));
 
-              const CarsForThatDestination = avalailabeVehicles.filter(car => car.dest_id === parseInt(finalDestination))
+             
 
-              console.log(CarsForThatDestination)
 
             
-              setTimeout(
-                ()=>{form.submit()},
-                4000
-              )
+              form.submit()
         
             form.reset();  
             }
         });
+      }
+
+
     });
 });
 
@@ -541,7 +551,7 @@
 
           restrictridereqDOM.style.display = "block";
           requestformDOM.style.display = "none";
-          let timeDiff = CountDownDalculateTimeDifference(`${difference.hours}:${difference.minutes}:${difference.seconds}`, `02:00:00`)
+          let timeDiff = CountDownDalculateTimeDifference(`${difference.hours}:${difference.minutes}:${difference.seconds}`, `00:60:00`)
           timeLeft.textContent = `${timeDiff.timeDifference}`;
           closeCountDownAndRequestForm()
           document.getElementById('waitlinebar').style.width = `${timeDiff.percentage}%`
@@ -550,7 +560,7 @@
         } else {
           restrictridereqDOM.style.display = "none";
           requestformDOM.style.display = "block";
-          let timeDiff = CountDownDalculateTimeDifference(`${difference.hours}:${difference.minutes}:${difference.seconds}`, `02:00:00`)
+          let timeDiff = CountDownDalculateTimeDifference(`${difference.hours}:${difference.minutes}:${difference.seconds}`, `00:60:00`)
           closeCountDownAndRequestForm()
           timeLeft.textContent = `${timeDiff.timeDifference}` ;
           MaxRequestReached()

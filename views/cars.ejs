@@ -10,9 +10,16 @@
     <!-- Bulma is included -->
     <link rel="stylesheet" href="css/main.min.css">
     <!-- Fonts -->
+    
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    
 </head>
 
 <body>
@@ -55,18 +62,19 @@
                                         <span class="icon"><i class="mdi mdi-reload"></i></span>
                                     </a>
                                 </header>
+
                                 <div class="card-content">
                                     <div class="b-table has-pagination">
                                         <div class="table-wrapper has-mobile-cards">
-                                            <table class="table is-fullwidth is-striped is-hoverable is-fullwidth">
+
+                                            <table id="cars_table" class="display">
                                                 <thead>
                                                     <tr>
-                
-                                                        <th></th>
+                                                        <th>ID</th>
                                                         <th>Name</th>
                                                         <th>Plate</th>
                                                         <th>Status</th>
-                                                      
+            
                                                         <th>Condition</th>
                                                         <th></th>
                                                     </tr>
@@ -74,23 +82,22 @@
                                                 <tbody>
                                                     <% for(var i=0; i<cars.length; i++) {%>
                                                     <tr>
-                                
+                                                        <td><%= cars[i].id %></td>
                                                         <td class="is-image-cell">
                                                             <div style="width: 60px;" class="image">
                                                                 <img src="<%= cars[i].imageUrl %>" class="is-rounded">
                                                             </div>
                                                         </td>
-                                                        <td data-label="Name"><%= cars[i].name %></td>
-                                                        <td data-label="Company"><%= cars[i].plate %></td>
-                                                        <td data-label="City"><%= cars[i].status %></td>
+                                                        <td><%= cars[i].name %></td>
+                                                        <td><%= cars[i].plate %></td>
+                                                        <td><%= cars[i].status %></td>
                                                         
-                                                        <td data-label="Condition">
+                                                        <td>
                                                             <small class="has-text-grey is-abbr-like"
                                                                 title="Oct 25, 2020"><%= cars[i].condition %></small>
                                                         </td>
-                                                        <td class="is-actions-cell">
-                                                            <div class="buttons is-right">
-                                                               
+                                                        <td>
+                                                            <div class="buttons is-right">           
                                                                 <button class="button is-small is-danger"
                                                                 onclick="deleteCarConfirmation('<%= cars[i].plate %>')" type="button">
                                                                     <span class="icon"><i
@@ -156,6 +163,16 @@
                                                     <% } %>
                                                 </tbody>
                                             </table>
+                                            <script>
+                                                // When document is ready convert to datatable $(document).ready(function () { $('#example').DataTable(); });
+                                                $(document).ready(function () {
+
+                                                    console.log('example')
+                                                     $('#cars_table').DataTable()
+                                                    
+                                                    }
+                                                     )
+                                            </script>
                                         </div>
                                     </div>
                                 </div>
