@@ -7,6 +7,30 @@ var logger = require("morgan");
 const bodyParser = require("body-parser");
 const crypto = require("crypto");
 
+const multer = require("multer");
+const vehicle_storage = multer.diskStorage({
+  destination : (req, file, cb) =>{
+    cb(null, 'public/images/vehicles')
+  },
+  filename:(req, file, cb)=>{
+    console.log(file)
+    cb(null, Date.now() + path.extname(file.originalname)); 
+  }
+});
+const profile_storage = multer.diskStorage({
+  destination : (req, file, cb) =>{
+    cb(null, 'public/images/profiles')
+  },
+  filename:(req, file, cb)=>{
+    console.log(file)
+    cb(null, Date.now() + path.extname(file.originalname)); 
+  }
+});
+
+const upload_car = multer({storage: vehicle_storage})
+const upload_profile_pic = multer({storage: profile_storage})
+
+
 const nodemailer = require("nodemailer");
 
 // Create a transporter using your Gmail credentials
@@ -51,14 +75,17 @@ let adminUser = {
   id: 1,
   drivercode: "USER101",
   name: "Cab ",
+  profileUrl : "/images/profiles/121JKDD.jpeg",
   surname: "TeJayy",
   usertype: userTypes.admin,
   email: "admin@infinite.com",
+  phone: "82389893",
   password: "admin",
 };
 let StudentUser = {
   id: 2,
   drivercode: "None",
+  profileUrl : "/images/profiles/121JKDD.jpeg",
   name: "Andile",
   phone: "0723074089",
   surname: "Masilela",
@@ -69,6 +96,7 @@ let StudentUser = {
 let StudentUser2 = {
   id: 3,
   drivercode: "None",
+  profileUrl : "/images/profiles/121JKDD.jpeg",
   name: "Victor",
   surname: "Mahluza",
   usertype: userTypes.student,
@@ -77,16 +105,18 @@ let StudentUser2 = {
 };
 let DriverUser1 = {
   id: 4,
+  profileUrl : "/images/profiles/121JKDD.jpeg",
   drivercode: "USER200",
   name: "AndileAs Driver",
   surname: "Masilela",
-  phone: "0723074089",
+  phone: "2783782783",
   usertype: userTypes.driver,
   email: "driver@infinite.com",
   password: "driver2",
 };
 let DriverUser2 = {
   id: 5,
+  profileUrl : "/images/profiles/121JKDD.jpeg",
   drivercode: "USER201",
   name: "Vic as Driver",
   surname: "Masilela",
@@ -109,6 +139,17 @@ let adminCar = {
 };
 let userCar = {
   id: 2,
+  name: "Golf 5 X9",
+  condition: "Good",
+  status: "booked",
+  dest_id: 1,
+  drivercode: "USER200",
+  plate: "MAH 200 MP",
+  seats: 15,
+  imageUrl: "images/vehicle2.jpg",
+};
+let userCar2 = {
+  id: 1,
   name: "Golf 5 X9",
   condition: "Good",
   status: "booked",
@@ -162,8 +203,10 @@ users.push(StudentUser);
 users.push(StudentUser2);
 users.push(DriverUser1);
 users.push(DriverUser2);
+
 cars.push(adminCar);
 cars.push(userCar);
+cars.push(userCar2);
 
 var app = express();
 // view engine setup
@@ -451,7 +494,7 @@ app.post("/api/login", (req, res) => {
     console.log("Session: ", req.session.user);
     res.redirect("/home"); // Redirect to the dashboard or any other authenticated page
   } else {
-    res.render("login", { error: "Invalid Credentials" }); // Redirect back to the login page if login fails
+    res.render("login", { error: "Your Password or email appears to be incorrect" }); // Redirect back to the login page if login fails
   }
 });
 
@@ -459,24 +502,57 @@ app.get("/api/users", (req, res) => {
   res.json(users);
 });
 
-app.post("/api/users/update", (req, res) => {
+app.post("/api/users/update/password", (req, res) => {
   const User = req.session.user;
-
-  const { name, surname, email, phone } = req.body;
-
-  const userToUpdateIndex = users.findIndex((user) => user.id === User.id);
-
-  console.log("Index to Update", userToUpdateIndex);
-
-  if (userToUpdateIndex !== -1) {
-    users[userToUpdateIndex].name = name;
-    users[userToUpdateIndex].surname = surname;
-    users[userToUpdateIndex].email = email;
-    users[userToUpdateIndex].phone = phone;
+  console.log("Updating user Password ...: ", User);
+  const { password} = req.body;
+  console.log(req.body);
+  // Assuming you have a user ID associated with the request (e.g., from a session)
+  const userId = req.session.user.id;
+  // Find the user by ID in the users array
+  const user = users.find(u => u.id === userId);
+  if (user) {
+    // Update the user's profileUrl
+    user.password = password;
+    req.session.user.password = password;
+    
+  } else {
+    console.log("User not found with ID:", userId);
   }
 
-  console.log("After Update", users[userToUpdateIndex]);
-  console.log("All Users", users);
+  
+  
+  console.log("Updating user Password ...: ", req.session.user);
+  res.redirect("/profile");
+});
+
+app.post("/api/users/update", (req, res) => {
+  const User = req.session.user;
+  console.log("Updating user...");
+  const { name, surname, email, phone } = req.body;
+
+  console.log(req.body);
+    // Assuming you have a user ID associated with the request (e.g., from a session)
+  const userId = req.session.user.id;
+
+  // Find the user by ID in the users array
+  const user = users.find(u => u.id === userId);
+
+  if (user) {
+    // Update the user's profileUrl
+    user.name = name;
+    req.session.user.name = name;
+    user.surname = surname;
+    req.session.user.surname = surname;
+    user.email = email;
+    req.session.user.email = email;
+    user.phone = phone;
+    req.session.user.phone = phone;
+
+  } else {
+    console.log("User not found with ID:", userId);
+  }
+
   res.redirect("/profile");
 });
 
@@ -726,20 +802,49 @@ app.get("/cars", (req, res) => {
 app.get("/api/cars", (req, res) => {
   res.send(cars);
 });
-app.post("/api/cars", (req, res) => {
+
+app.post("/api/user/profile/image", upload_profile_pic.single('newProfileImage'), (req, res) => {
+  console.log("Receiving profile image..");
+
+  // Assuming you have a user ID associated with the request (e.g., from a session)
+  const userId = req.session.user.id;
+  
+  // Find the user by ID in the users array
+  const user = users.find(u => u.id === userId);
+  console.log(user);
+
+  if (user) {
+    // Update the user's profileUrl
+    user.profileUrl = '/images/profiles/' + req.file.filename;
+    req.session.user.profileUrl = user.profileUrl;
+    console.log("Updated profile image for user ID:", userId);
+    console.log("New profile image URL:", user.profileUrl);
+  } else {
+    console.log("User not found with ID:", userId);
+  }
+
+  res.redirect('/profile');
+});
+
+app.post("/api/cars", upload_car.single('carImage'), (req, res) => {
   const User = req.session.user;
+  console.log("User Adding car: ", User);
   console.log("Adding a car... : ", req.body);
-  const { name, plate, seats,destination_id, imageUrl, condition } = req.body;
+  const { name, plate, seats,destination_id, condition } = req.body;
   const destination = destination_locations.find(
     (loc) => loc.id === parseInt(destination_id)
   );
   let id = cars.length + 1;
+
+  const imageUrl = '/images/vehicles/' + req.file.filename;
+
+  console.log(imageUrl);
   const newCar = {
     id,
     name,
     seats : parseInt(seats),
     plate,
-    imageUrl: "/images/vehicle1.jpg",
+    imageUrl:imageUrl,
     status: vehicleAvailStat.available,
     condition,
     dest_id : parseInt(destination_id),
@@ -826,6 +931,19 @@ app.get("/api/cars/delete/:plate", (req, res) => {
     res.status(404).json({ success: false, message: "Car not found" });
   }
 });
+app.get("/api/cars/all", (req, res) => {
+  // Find the index of the car with the specified plate
+  if (cars.length > 0) {
+    // Car found, remove it from the array
+    res.json(cars);
+  } else {
+    // Car not found
+    res.status(404).json({ success: false, message: "No Cars" });
+  }
+});
+
+
+
 
 app.get("/api/users/delete/:name", (req, res) => {
   console.log("I am on Delete");
@@ -864,7 +982,7 @@ app.get("/api/users/:id", (req, res) => {
   }
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 
 app.use(function (req, res, next) {
   next(createError(404));

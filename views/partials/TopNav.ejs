@@ -45,14 +45,14 @@
       </h1>
       <button onclick="showAddLocationForm()" class="button is-primary" style="margin: 10px;"
       class="navbar-item has-divider is-desktop-icon-only">
-      <span class="icon"><i class="mdi mdi-car-wash"></i> </span>
+      <span class="icon"><i class="mdi mdi-compass"></i> </span>
       <span>Add a Location</span>
       </button>
         <div class="navbar-item has-dropdown has-dropdown-with-icons has-divider is-hoverable">
           
           <div class="navbar-dropdown">
             <a href="/profile" class="navbar-item is-active">
-              <span class="icon"><i class="mdi mdi-account"></i></span>
+              <span class="icon"><i class="mdi mdi-account"></i></span> 
               <span>My Profile</span>
             </a>
         
@@ -81,7 +81,13 @@
         <div class="navbar-item has-dropdown has-dropdown-with-icons has-divider has-user-avatar is-hoverable">
           <a class="navbar-link is-arrowless">
             <div class="is-user-avatar">
+
+
+              <% if (!user.profileUrl) { %>
               <img src="https://avatars.dicebear.com/v2/initials/john-doe.svg" alt="John Doe">
+              <% } else { %>
+                <img src="<%= user.profileUrl %>" alt="John Doe">
+                <% } %>
             </div>
             <div class="is-user-name">
               <span><%- user.name %> <%- user.surname %>(<%- user.usertype %>)</span>

@@ -15,14 +15,16 @@
                         <div class="box">
                             <img src="/images/logo.png" alt="" width="80px" srcset="">
                             <h1 class="title">Login</h1>
-                            <p>
+                         
                                 <% if (typeof error !== 'undefined' && error !== null) { %>
-                                  <div class="error-message" style="color: red;">
-                                    <%= error %>
-                                  </div>
+                         
+                                  <article class="message is-danger">
+                                    <div class="message-body">
+                                        <%= error %>
+                                    </div>
+                                  </article>
                                 <% } %>
-                              </p>
-                              <br>
+
                             <form action="/api/login" method="post">
                                 <div class="field">
                                     <label class="label">Email</label>

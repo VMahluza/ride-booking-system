@@ -45,16 +45,16 @@
               </p>
             </header>
             <div class="card-content">
-              <form method="post" action="api/users/update">
+              <form method="post" action="/api/users/update">
                 <hr>
                 <div class="field is-horizontal">
                   <div class="field-label is-normal">
                     <label class="label">Id</label>
                   </div>
-                  <div class="field-body">
+                  <div class="field-body is-small">
                     <div class="field">
                       <div class="control">
-                        <input type="text"  readonly disabled autocomplete="on" name="id" value="<%- user.id %>" class="input"
+                        <input type="text"  readonly disabled autocomplete="on" name="id" value="<%- user.id %>" class="input is-small"
                           required>
                       </div>
                     </div>
@@ -64,10 +64,10 @@
                   <div class="field-label is-normal">
                     <label class="label">National ID</label>
                   </div>
-                  <div class="field-body">
+                  <div class="field-body is-small">
                     <div class="field">
                       <div class="control">
-                        <input type="text" readonly disabled autocomplete="on" name="drivercode" value="<%- user.drivercode %>" class="input"
+                        <input type="text" readonly disabled autocomplete="on" name="drivercode" value="<%- user.drivercode %>" class="input is-small"
                           required>
                       </div>
                     </div>
@@ -77,10 +77,10 @@
                   <div class="field-label is-normal">
                     <label class="label">Name</label>
                   </div>
-                  <div class="field-body">
+                  <div class="field-body is-small">
                     <div class="field">
                       <div class="control">
-                        <input type="text" autocomplete="on" name="name" value="<%- user.name %>" class="input"
+                        <input type="text" autocomplete="on" name="name" value="<%- user.name %>" class="input is-small"
                           required>
                       </div>
                     </div>
@@ -90,10 +90,10 @@
                   <div class="field-label is-normal">
                     <label class="label">Surname</label>
                   </div>
-                  <div class="field-body">
+                  <div class="field-body is-small">
                     <div class="field">
                       <div class="control">
-                        <input type="text" autocomplete="on" name="surname" value="<%- user.surname %>" class="input"
+                        <input type="text" autocomplete="on" name="surname" value="<%- user.surname %>" class="input is-small"
                           required>
                       </div>
                     </div>
@@ -103,10 +103,10 @@
                   <div class="field-label is-normal">
                     <label class="label">Phone</label>
                   </div>
-                  <div class="field-body">
+                  <div class="field-body is-small">
                     <div class="field">
                       <div class="control">
-                        <input type="text" autocomplete="on" name="phone" value="<%- user.phone %>" class="input"
+                        <input type="text" autocomplete="on" name="phone" value="<%- user.phone %>" class="input is-small"
                           required>
                       </div>
                     </div>
@@ -116,10 +116,10 @@
                   <div class="field-label is-normal">
                     <label class="label">E-mail</label>
                   </div>
-                  <div class="field-body">
+                  <div class="field-body is-small">
                     <div class="field">
                       <div class="control">
-                        <input type="email" autocomplete="on" name="email" value="<%- user.email %>" class="input"
+                        <input type="email" autocomplete="on" name="email" value="<%- user.email %>" class="input is-small"
                           required>
                       </div>
                     </div>
@@ -128,7 +128,7 @@
                 <hr>
                 <div class="field is-horizontal">
                   <div class="field-label is-normal"></div>
-                  <div class="field-body">
+                  <div class="field-body is-small">
                     <div class="field">
                       <div class="control">
                         <button type="submit" class="button is-primary">
@@ -232,24 +232,6 @@
                           </table>
                       </div>
                     </div>
-                    <div class="notification">
-                      <div class="level">
-                        <div class="level-left">
-                          <div class="level-item">
-                            <div class="buttons has-addons">
-                              <button type="button" class="button is-active">1</button>
-                              <button type="button" class="button">2</button>
-                              <button type="button" class="button">3</button>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="level-right">
-                          <div class="level-item">
-                            <small>Page 1 of <%=  userCars.length%></small>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -275,12 +257,7 @@
                       <table class="table is-fullwidth is-striped is-hoverable is-fullwidth">
                         <thead>
                           <tr>
-                            <th class="is-checkbox-cell">
-                              <label class="b-checkbox checkbox">
-                                <input type="checkbox" value="false">
-                                <span class="check"></span>
-                              </label>
-                            </th>
+
                             <th></th>
                             <th>Name</th>
                             <th>Plate</th>
@@ -293,12 +270,6 @@
                         <tbody>
                           <% for(var i=0; i<userCars.length; i++) {%>
                           <tr>
-                            <td class="is-checkbox-cell">
-                              <label class="b-checkbox checkbox">
-                                <input type="checkbox" value="false">
-                                <span class="check"></span>
-                              </label>
-                            </td>
                             <td class="is-image-cell">
                               <div style="width: 60px;" class="image">
                                 <img src="<%= userCars[i].imageUrl %>" class="is-rounded">
@@ -396,12 +367,6 @@
                         <table class="table is-fullwidth is-striped is-hoverable is-fullwidth">
                           <thead>
                             <tr>
-                              <th class="is-checkbox-cell">
-                                <label class="b-checkbox checkbox">
-                                  <input type="checkbox" value="false">
-                                  <span class="check"></span>
-                                </label>
-                              </th>
                               <th></th>
                               <th>Name</th>
                               <th>Plate</th>
@@ -414,12 +379,6 @@
                           <tbody>
                             <% for(var i=0; i<userCars.length; i++) {%>
                             <tr>
-                              <td class="is-checkbox-cell">
-                                <label class="b-checkbox checkbox">
-                                  <input type="checkbox" value="false">
-                                  <span class="check"></span>
-                                </label>
-                              </td>
                               <td class="is-image-cell">
                                 <div style="width: 60px;" class="image">
                                   <img src="<%= userCars[i].imageUrl %>" class="is-rounded">
@@ -474,24 +433,7 @@
                           </tbody>
                         </table>
                       </div>
-                      <div class="notification">
-                        <div class="level">
-                          <div class="level-left">
-                            <div class="level-item">
-                              <div class="buttons has-addons">
-                                <button type="button" class="button is-active">1</button>
-                                <button type="button" class="button">2</button>
-                                <button type="button" class="button">3</button>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="level-right">
-                            <div class="level-item">
-                              <small>Page 1 of <%=  userCars.length%></small>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                    
                     </div>
                   </div>
                 </div>
@@ -510,105 +452,272 @@
             </header>
             <div class="card-content">
               <div class="is-user-avatar image has-max-width is-aligned-center">
+                
+                <% if (!user.profileUrl) { %>
                 <img
                   style="width: 100px;border-radius: 5px;border: 2px solid #00d1b2;"
                   src="https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=826&t=st=1692809729~exp=1692810329~hmac=1c15c77c5215eb33e58e711a8d8546a9794db975489ad46227b39363fbe632fc"
                   alt="John Doe">
+                  <% } else { %>
+                    <img onclick="ChangeProfileImage('<%= user.profileUrl %>')"
+                    style="width: 100px;border-radius: 5px;border: 2px solid #00d1b2;"
+                    src="<%= user.profileUrl %>"
+                    alt="John Doe">
+                <% } %>
+                  <p>Click Image To View or Change</p>
+
+                <!-- Script For allowing the user to change profile Picture -->
+                <script>
+
+function ChangeProfileImage(profileUrl) {
+  // HTML content for the SweetAlert modal
+  const htmlContent = `
+    <img src="${profileUrl}" alt="Current Profile Image" style="max-width: 100%; height: auto;">
+    
+    <form id="changeProfileForm" action="/api/user/profile/image" enctype="multipart/form-data"  method="post" class="box">
+      
+      <div class="file is-small is-right is-info">
+  <label class="file-label">
+    <input class="file-input" type="file" name="newProfileImage" accept="image/*" onchange="handleFileChange(event)">
+    <span class="file-cta">
+      <span class="file-icon">
+        <i class="fas fa-upload"></i>
+      </span>
+      <span class="file-label">
+        Right file…
+      </span>
+    </span>
+    <span class="file-name">
+      ${profileUrl}
+    </span>
+  </label>
+</div>
+      <button style="display:none" type="submit" id="profile_url_btn"></button>
+      </form>
+  `;
+
+  // Show the SweetAlert modal
+  Swal.fire({
+    title: 'Change Profile Image',
+    html: htmlContent,
+    showCancelButton: true,
+    showConfirmButton: true,
+    confirmButtonText: 'Change',
+    cancelButtonText: 'Cancel',
+    didOpen: () => {
+      console.log('Profile Picture dialog was opened');
+      const changeButton = document.querySelector('.swal2-confirm');
+      console.log(changeButton);
+      changeButton.style.display = 'none';
+    },
+    preConfirm: () => {
+      // Handle form submission here
+      const newProfileImage = document.querySelector('#changeProfileForm input[name="newProfileImage"]').files[0];
+
+      const profile_url_btn = document.querySelector('#profile_url_btn');
+      profile_url_btn.click();
+      // Perform the necessary actions with the new profile image (e.g., upload to the server)
+      // ...
+      console.log('Profile URL Submit Success')
+      // Return any data you want to pass to the Swal.then callback
+      return {
+        newProfileImage: newProfileImage,
+      };
+    },
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Handle the confirmation
+      const newProfileImage = result.value.newProfileImage;
+      if (newProfileImage) {
+        // Update the UI or perform any other actions with the new profile image
+        // ...
+
+        // For demonstration purposes, let's log the file details
+        console.log('New Profile Image:', newProfileImage);
+      }
+    } else {
+      // Handle the cancellation
+      console.log('Profile image change canceled.');
+    }
+  });
+
+}
+
+// Function to handle file change and toggle the "Change" button visibility
+function handleFileChange(event) {
+  const changeButton = document.querySelector('.swal2-confirm');
+  changeButton.style.display = event.target.files.length > 0 ? 'block' : 'none';
+}
+// Example usage
+const user = {
+  profileUrl: 'path/to/current-profile-image.jpg',
+};
+
+
+                </script>
+
               </div>
               <hr>
               <div class="field">
                 <label class="label">Name</label>
                 <div class="control is-clearfix">
-                  <input type="text" readonly value="<%- user.name %>" class="input is-static">
+                  <input type="text" readonly value="<%- user.name %>" class="input is-small is-static">
                 </div>
               </div>
               <hr>
               <div class="field">
                 <label class="label">E-mail</label>
                 <div class="control is-clearfix">
-                  <input type="text" readonly value="<%- user.email %>" class="input is-static">
+                  <input type="text" readonly value="<%- user.email %>" class="input is-small is-static">
                 </div>
               </div>
               <hr>
               <div class="field">
                 <label class="label">User Type</label>
                 <div class="control is-clearfix">
-                  <input type="text" readonly value="<%- user.usertype %>" class="input is-static">
+                  <input type="text" readonly value="<%- user.usertype %>" class="input is-small is-static">
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="card">
-        <header class="card-header">
-          <p class="card-header-title">
-            <span class="icon"><i class="mdi mdi-lock default"></i></span>
-            Change Password
-          </p>
-        </header>
-        <div class="card-content">
-          <form>
-            <div class="field is-horizontal">
-              <div class="field-label is-normal">
-                <label class="label">Current password</label>
-              </div>
-              <div class="field-body">
-                <div class="field">
-                  <div class="control">
-                    <input type="password" name="password_current" value="<%- user.password %>"
-                      autocomplete="current-password" class="input" required>
-                  </div>
-                  <p class="help">Required. Your current password</p>
-                </div>
-              </div>
-            </div>
-            <hr>
-            <div class="field is-horizontal">
-              <div class="field-label is-normal">
-                <label class="label">New password</label>
-              </div>
-              <div class="field-body">
-                <div class="field">
-                  <div class="control">
-                    <input type="password" autocomplete="new-password" name="password" class="input" required>
-                  </div>
-                  <p class="help">Required. New password</p>
-                </div>
-              </div>
-            </div>
-            <div class="field is-horizontal">
-              <div class="field-label is-normal">
-                <label class="label">Confirm password</label>
-              </div>
-              <div class="field-body">
-                <div class="field">
-                  <div class="control">
-                    <input type="password" autocomplete="new-password" name="password_confirmation" class="input"
-                      required>
-                  </div>
-                  <p class="help">Required. New password one more time</p>
-                </div>
-              </div>
-            </div>
-            <hr>
-            <div class="field is-horizontal">
-              <div class="field-label is-normal"></div>
-              <div class="field-body">
-                <div class="field">
-                  <div class="control">
-                    <button type="submit" class="button is-primary">
-                      Submit
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
     </section>
+    <section class="section">
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title">
+          <span class="icon"><i class="mdi mdi-lock default"></i></span>
+          Change Password
+        </p>
+      </header>
+      <div class="card-content">
+        <form method="post" action="/api/users/update/password">
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Current password</label>
+            </div>
+            <div class=" field-body is-small">
+              <div class="field">
+                <div class="control">
+                  <input onchange="return OnCurrentPassword(event, this, '<%- user.password %>')" type="password" id="password_current" name="password_current"
+                    autocomplete="current-password" class="input is-small" required>
+                </div>
+                <p id="current_pass_err" class="help">Required. Your current password</p>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">New password</label>
+            </div>
+            <div class="field-body is-small">
+              <div class="field">
+                <div class="control">
+                  <input type="password" autocomplete="new-password" id="new_password" name="password" class="input is-small" required>
+                </div>
+                <p id="new_password_err" class="help">Required. New password</p>
+              </div>
+            </div>
+          </div>
+          <div class="field is-horizontal">
+            <div class="field-label is-normal">
+              <label class="label">Confirm password</label>
+            </div>
+            <div class="field-body is-small">
+              <div class="field">
+                <div class="control">
+                  <input type="password" autocomplete="new-password" id="password_confirmation" name="password_confirmation" class="input is-small"
+                    required>
+                </div>
+                <p class="help" id="confirm_passord_err">Required. New password one more time</p>
+              </div>
+              <div class="field-label is-normal">
+                <button type="button" onclick="OnConfirmPassword()" class="button is-primary">Confirm password</button>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="field is-horizontal">
+            <div class="field-label is-normal"></div>
+            <div class="field-body is-small">
+              <div class="field">
+                <div class="control">
+                  <button id="password_submit_btn" type="submit" class="button is-primary">
+                    Submit
+                  </button>
 
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <script>
+
+          const current_pass_errTxt = document.getElementById("current_pass_err");
+          const confirm_passord_errTxt = document.getElementById("confirm_passord_err");
+          
+          const password_submit_btn = document.getElementById("password_submit_btn")
+          password_submit_btn.setAttribute("disabled", "disabled");
+
+          const new_password = document.getElementById("new_password")
+          const confirm_password = document.getElementById("password_confirmation")
+
+          var isCorrentCurrentPassword = false;
+
+          function CurrentPasswordMatch(isOkay) {
+
+            if(!isOkay){
+              current_pass_errTxt.innerText = "The Password Is Incorrect";
+              current_pass_errTxt.setAttribute("class", "help is-danger");
+              isCorrentCurrentPassword = false;
+            }else {
+              current_pass_errTxt.innerText = "Your Password is Ok";
+              current_pass_errTxt.setAttribute("class", "help is-success");
+              isCorrentCurrentPassword = true;
+            }
+          }      
+
+          function ConfirmPasswordMatch(isConfirmed) {
+
+            if(isConfirmed) {
+
+
+              confirm_passord_errTxt.innerText = "Matching!";
+              confirm_passord_errTxt.setAttribute("class", "help is-success");
+              password_submit_btn.removeAttribute("disabled");
+
+            } else {
+
+              confirm_passord_errTxt.innerText = "The Password Is Not matching";
+              confirm_passord_errTxt.setAttribute("class", "help is-danger");
+          password_submit_btn.setAttribute("disabled", "disabled");
+
+            }
+            
+          }      
+
+          function OnCurrentPassword(event, element, actualPassword) {
+            var currentPassword = element.value;
+            CurrentPasswordMatch(actualPassword == currentPassword)
+          }
+
+          function OnConfirmPassword() {
+            const newPassTxt = new_password.value
+            const confirm_passTxt = confirm_password.value 
+            ConfirmPasswordMatch(newPassTxt === confirm_passTxt && isCorrentCurrentPassword)
+            }
+          
+            // Assuming this code is on the client side (browser)
+
+
+
+
+        </script>
+      </div>
+    </div>
+  </section>
     <footer class="footer">
       <div class="container-fluid">
         <div class="level">

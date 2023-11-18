@@ -61,12 +61,7 @@
                                             <table class="table is-fullwidth is-striped is-hoverable is-fullwidth">
                                                 <thead>
                                                     <tr>
-                                                        <th class="is-checkbox-cell">
-                                                            <label class="b-checkbox checkbox">
-                                                                <input type="checkbox" value="false">
-                                                                <span class="check"></span>
-                                                            </label>
-                                                        </th>
+                
                                                         <th></th>
                                                         <th>Name</th>
                                                         <th>Plate</th>
@@ -79,12 +74,7 @@
                                                 <tbody>
                                                     <% for(var i=0; i<cars.length; i++) {%>
                                                     <tr>
-                                                        <td class="is-checkbox-cell">
-                                                            <label class="b-checkbox checkbox">
-                                                                <input type="checkbox" value="false">
-                                                                <span class="check"></span>
-                                                            </label>
-                                                        </td>
+                                
                                                         <td class="is-image-cell">
                                                             <div style="width: 60px;" class="image">
                                                                 <img src="<%= cars[i].imageUrl %>" class="is-rounded">
@@ -167,24 +157,6 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <div class="notification">
-                                            <div class="level">
-                                                <div class="level-left">
-                                                    <div class="level-item">
-                                                        <div class="buttons has-addons">
-                                                            <button type="button" class="button is-active">1</button>
-                                                            <!-- <button type="button" class="button">2</button>
-                                                            <button type="button" class="button">3</button> -->
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="level-right">
-                                                    <div class="level-item">
-                                                        <small>Page 1 of <%=  cars.length%></small>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -244,7 +216,7 @@
             Swal.fire({
                 title: `Add Car`,
                 html: `         
-                    <form action="/api/cars" id="addCarForm" method="post" class="box">   
+                    <form action="/api/cars" enctype="multipart/form-data" id="addCarForm" method="post" class="box">   
                         <div style="display:flex">
                             <div class="field" style="width:40%;margin:5px">    
                                 <label class="label">Vehicle Name</label>
@@ -282,16 +254,25 @@
                             <label class="label">Initial Destination Assignment</label>
                             <div class="select" >
                             <select  name="destination_id" id="destination_id">
-                              <option value="">Select a location</option> 
-                              <% for(var i=0; i<destination_locations.length; i++) { %>                                        
+                            <option value="">Select a location</option> 
+                            <% for(var i=0; i<destination_locations.length; i++) { %>                                        
                                 <option value="<%= destination_locations[i].id %>"><%= destination_locations[i].name %>, <%= destination_locations[i].addressline1 %>, <%= destination_locations[i].addressline2 %></option>
-                              <% } %>
-                              <!-- Add more options as needed -->
-                          </select>
-                          </div>
-                          
-                          </div>
+                            <% } %>
+                            <!-- Add more options as needed -->
+                        </select>
                         </div>
+                        
+                        </div>
+                        </div>
+                        <div style="display:flex">
+                            <div class="field" style="width:40%;margin:5px">
+                            <label class="label">Car Image</label>
+                            <div class="control">
+                                <input class="input" type="file" name="carImage" id="carImage">
+                            </div>
+                            </div>
+                        </div>
+
                         <button id="submit" style="display:none" type="submit">Save</button>
                     </form>          
                 `,

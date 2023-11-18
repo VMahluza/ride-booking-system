@@ -399,10 +399,18 @@
         </div>
           </div>
       </div>
+
   </section>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('pickupForm');
+
+
+         
+      const avalailabeVehicles = <%- JSON.stringify(cars) %>;
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+    
+      const form = document.getElementById('pickupForm');
 
     form.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -416,12 +424,13 @@
         // const pickupLocationSelect =  document.getElementById('pickupLocationSelect').value;
         let finalDestination = destination.value;
         if (destination ==='Other'){
-          finalDestination = document.getElementById('otherLocationField').value;
+          finalDestination = document.getElementById('otherLocationField').innerText;
         }
         // Show a confirmation dialog using SweetAlert
+
         Swal.fire({
-            title: 'Confirm Requesting A ride',
-            text: `You are about to request a ride from ${pickupLocation} to ${finalDestination}\n\nAre you sure you want to Continue?`,
+            title: 'Confirm Requesting Your ride',
+            text: `You are about to request a ride from ${pickupLocation} to ${destination.options[destination.selectedIndex].text}\n\nAre you sure you want to Continue?`,
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#00d1b2',
@@ -456,7 +465,19 @@
             // .catch(error => {
             //     console.error('Error sending data:', error);
             // })
-            form.submit()
+
+              console.log('Final Destination ID', parseInt(finalDestination));
+
+              const CarsForThatDestination = avalailabeVehicles.filter(car => car.dest_id === parseInt(finalDestination))
+
+              console.log(CarsForThatDestination)
+
+            
+              setTimeout(
+                ()=>{form.submit()},
+                4000
+              )
+        
             form.reset();  
             }
         });
@@ -566,6 +587,9 @@
         percentage
       };
     }
+
+
+
 </script>
 
     <footer class="footer">
