@@ -73,19 +73,33 @@ var authRouterLogin = require("./routes/login");
 
 let adminUser = {
   id: 1,
+  disabled : false,
   drivercode: "USER101",
   name: "Cab ",
-  profileUrl : "/images/profiles/121JKDD.jpeg",
+  profileUrl : "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=826&t=st=1692809729~exp=1692810329~hmac=1c15c77c5215eb33e58e711a8d8546a9794db975489ad46227b39363fbe632fc",
   surname: "TeJayy",
   usertype: userTypes.admin,
   email: "admin@infinite.com",
   phone: "82389893",
   password: "admin",
 };
+let inifiniTechUser = {
+  id: 6,
+  disabled : false,
+  drivercode: "ADMIN123",
+  name: "Percyval",
+  profileUrl : "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=826&t=st=1692809729~exp=1692810329~hmac=1c15c77c5215eb33e58e711a8d8546a9794db975489ad46227b39363fbe632fc",
+  surname: "Infini",
+  usertype: userTypes.admin,
+  email: "percyval@gmail.com",
+  phone: "82389893",
+  password: "Percyval123",
+};
 let StudentUser = {
   id: 2,
+  disabled : true,
   drivercode: "None",
-  profileUrl : "/images/profiles/121JKDD.jpeg",
+  profileUrl : "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=826&t=st=1692809729~exp=1692810329~hmac=1c15c77c5215eb33e58e711a8d8546a9794db975489ad46227b39363fbe632fc",
   name: "Andile",
   phone: "0723074089",
   surname: "Masilela",
@@ -96,7 +110,8 @@ let StudentUser = {
 let StudentUser2 = {
   id: 3,
   drivercode: "None",
-  profileUrl : "/images/profiles/121JKDD.jpeg",
+  disabled : false,
+  profileUrl : "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=826&t=st=1692809729~exp=1692810329~hmac=1c15c77c5215eb33e58e711a8d8546a9794db975489ad46227b39363fbe632fc",
   name: "Victor",
   surname: "Mahluza",
   usertype: userTypes.student,
@@ -105,7 +120,8 @@ let StudentUser2 = {
 };
 let DriverUser1 = {
   id: 4,
-  profileUrl : "/images/profiles/121JKDD.jpeg",
+  disabled : false,
+  profileUrl : "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=826&t=st=1692809729~exp=1692810329~hmac=1c15c77c5215eb33e58e711a8d8546a9794db975489ad46227b39363fbe632fc",
   drivercode: "USER200",
   name: "AndileAs Driver",
   surname: "Masilela",
@@ -116,7 +132,8 @@ let DriverUser1 = {
 };
 let DriverUser2 = {
   id: 5,
-  profileUrl : "/images/profiles/121JKDD.jpeg",
+  disabled : true,
+  profileUrl : "https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=826&t=st=1692809729~exp=1692810329~hmac=1c15c77c5215eb33e58e711a8d8546a9794db975489ad46227b39363fbe632fc",
   drivercode: "USER201",
   name: "Vic as Driver",
   surname: "Masilela",
@@ -201,6 +218,7 @@ console.log(destination_locations);
 users.push(adminUser);
 users.push(StudentUser);
 users.push(StudentUser2);
+users.push(inifiniTechUser)
 users.push(DriverUser1);
 users.push(DriverUser2);
 
@@ -302,11 +320,21 @@ To server
 
 // START OF RIDE REQUESTS
 app.get("/api/ride-request/accept/:req_id", (req, res) => {
-  if (req.session.user) {
+  const User = req.session.user
+  if (User) {
     const rideRequest = rideRequests.find(
       (ride) => parseInt(ride.id) === parseInt(req.params.req_id)
     );
     rideRequest.status = rideStatus.accepted;
+
+    /*                        <td data-label="pickupLocation"><%= UserRideRequests[i].pickupLocation %></td>
+                        <td data-label="destination">
+                          <%= UserRideRequests[i].destination.name %>, 
+                          <%= UserRideRequests[i].destination.addressline1 %>, 
+                          <%= UserRideRequests[i].destination.addressline2 %>
+                        </td>*/
+
+    SendEmail(User.email, "Ride request accepted", `Dear ${User.name} ${User.surname}, Your Ride request has been accepted please be ready for Pick Up at ${rideRequest.pickupLocation} your destination is set to ${rideRequest.destination.name}`)
     return res.redirect("/home");
   } else {
     return res.redirect("/auth/login");
@@ -343,11 +371,20 @@ app.post("/reset-password", (req, res) => {
 
 app.get("/app", (req, res) => res.render("page"));
 app.get("/api/ride-request/opened/:req_id", (req, res) => {
-  if (req.session.user) {
+  
+  const User = req.session.user
+  if (User) {
     const rideRequest = rideRequests.find(
       (ride) => parseInt(ride.id) === parseInt(req.params.req_id)
     );
+
+    console.log("Opened New Ride Request", rideRequest)
+    const Driver = users.find(user => user.drivercode === rideRequest.selectedDriverCode)
+    console.log("For Driver", Driver)
+
     rideRequest.status = rideStatus.opened;
+    SendEmail(User.email, "New Ride Request Confirmation", `Dear ${User.name} ${User.surname}, Your Ride request has been received please be ready for Pick Up at ${rideRequest.pickupLocation} your destination is set to ${rideRequest.destination.name}`)
+
     res.redirect("/home");
   } else {
     res.redirect("/auth/login");
@@ -409,6 +446,16 @@ app.post("/api/ride-request", (req, res) => {
           requesterObject: User,
         };
 
+        
+        console.log("Opened New Ride Request", newRideRequest)
+        const Driver = users.find(user => user.drivercode === newRideRequest.selectedDriverCode)
+        console.log("For Driver", Driver)
+
+        SendEmail(User.email, "New Ride Request Confirmation", `Dear ${User.name} ${User.surname}, Your Ride request has been received please be ready for Pick Up at ${newRideRequest.pickupLocation} your destination is set to ${newRideRequest.destination.name}`)
+        
+        
+          SendEmail(Driver.email, "New Ride Request for You", `Dear ${Driver.name} ${Driver.surname}, You have received a Ride request from ${User.name} ${User.surname} @${User.email} Pick Up at ${newRideRequest.pickupLocation} User destination is set to ${newRideRequest.destination.name}, Login to your Portal to view`)
+     
         console.log("Ride Request =>:", newRideRequest);
         rideRequests.push(newRideRequest);
       } else {
@@ -459,6 +506,93 @@ app.get("/ride-requests", (req, res) => {
 });
 // END OF RIDE REQUESTS
 
+app.post("/api/users/account/disable", (req, res) => {
+  const { userId , reason } = req.body
+  const foundUser = users.find(user => user.id === parseInt(userId));
+  const userIndex = users.findIndex(user => user.id === parseInt(userId));
+  
+  // If the user with the specified ID is found
+  if (userIndex !== -1) {
+    // Update the age property of the user
+    users[userIndex].disabled = true;
+    console.log(`User with ID ${userId} updated.`);
+  } else {
+    console.log(`User with ID ${userId} not found.`);
+  }
+
+  const emailMsg = `Dear ${foundUser.name} ${foundUser.surname},  Your account has been Disabled Contact Admin @TheInfiniteTech23@gmail.com , Reason: ` + reason; 
+
+  if (foundUser) {
+    const mailOptions = {
+      from: "botauto212@gmail.com",
+      to: foundUser.email,
+      subject: "Account Disabled",
+      text:
+      emailMsg
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
+  }
+  
+  res.redirect("/home");
+});
+app.post("/api/users/account/enable", (req, res) => {
+  const { userId , reason } = req.body
+  const foundUser = users.find(user => user.id === parseInt(userId));
+  const userIndex = users.findIndex(user => user.id === parseInt(userId));
+  
+  // If the user with the specified ID is found
+  if (userIndex !== -1) {
+    // Update the age property of the user
+    users[userIndex].disabled = false;
+    console.log(`User with ID ${userId} updated.`);
+  } else {
+    console.log(`User with ID ${userId} not found.`);
+  }
+
+  const emailMsg = `Dear ${foundUser.name} ${foundUser.surname}, Your account has been Enabled Again, Reason: ` + reason; 
+  if (foundUser) {
+    const mailOptions = {
+      from: "botauto212@gmail.com",
+      to: foundUser.email,
+      subject: "Account Enabled Again",
+      text:
+      emailMsg
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
+  }
+  
+  res.redirect("/home");
+});
+
+function SendEmail(to, subject, message) {
+  const mailOptions = {
+    from: "botauto212@gmail.com",
+    to: to,
+    subject: subject,
+    text:
+    message
+  };
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
+}
+
 app.post("/api/register", (req, res) => {
   console.log(req.body);
   let id = users.length + 1;
@@ -466,6 +600,7 @@ app.post("/api/register", (req, res) => {
     req.body;
   const newUser = {
     id,
+    disabled : false,
     drivercode,
     name,
     surname,
@@ -489,15 +624,25 @@ function findUserByEmailAndPassword(email, password) {
 app.post("/api/login", (req, res) => {
   const { email, password } = req.body;
   const foundUser = findUserByEmailAndPassword(email, password);
+
+  if(!foundUser.disabled){
+
   if (foundUser) {
     // Store user information in the session
     req.session.user = foundUser;
+    
     console.log("Session: ", req.session.user);
     res.redirect("/home"); // Redirect to the dashboard or any other authenticated page
   } else {
     res.render("login", { error: "Your Password or email appears to be incorrect" }); // Redirect back to the login page if login fails
   }
-});
+} else {
+  res.render("login", { error: "Your Account was Disabled, Contact Admin @TheInfiniteTech23@gmail.com" }); 
+}
+
+}
+
+);
 
 app.get("/api/users", (req, res) => {
   res.json(users);
@@ -752,10 +897,13 @@ app.get("/home", (req, res) => {
           }
         }
       }
+
+      const adminUsers = users.filter((user) => user.id !== req.session.user.id)
+
       return res.render("home-admin", {
         user: req.session.user,
         cars: cars,
-        users: users,
+        users: adminUsers,
         LastRideRequest: UserRideRequests[UserRideRequests - 1],
         UserRideRequests: UserRideRequests,
         numberOfRideRequestToday,

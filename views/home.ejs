@@ -393,7 +393,7 @@
 
                       
 
-                                                              }
+                                       }
                                                     
                     </script>
                     <% } %>
@@ -410,7 +410,12 @@
 
 
          
-      const avalailabeVehicles = <%- JSON.stringify(cars) %>;
+      const avalailabeVehicles = <%- JSON.stringify(cars, (key, value) => {
+    if (key === 'car' || key === 'user') {
+        return undefined;
+    }
+    return value;
+}) %>;
 
 
     document.addEventListener('DOMContentLoaded', function() {

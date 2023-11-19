@@ -54,11 +54,10 @@
          
          </h2>                    
                     <% for(var i=0; i< users.length; i++) {%>
-                    <tr style="cursor: pointer;" onclick="viewRideRequest('<%= users[i].id %>')"  >
+                    <tr style="cursor: pointer;" onclick="viewUserRequest('<%= users[i].id %>')"  >
                         <td data-label="Id"><%= users[i].id %></td>
                         <td data-label="national Id"><%= users[i].drivercode %></td>
                         <!-- <td data-label="carPlate"><%= users[i].car ? users[i].car.plate : 'No car information' %></td> -->
-
                         <td data-label="Requester"><%= users[i].name +" "+ users[i].surname %></td>
                         <td data-label="Requester"><a href="mailto:<%= users[i].email %>"><%= users[i].email %></a></td>
                         <td data-label="Condition">
@@ -77,13 +76,174 @@
                     </tr>
                     <!-- Car Details Modal -->
                     <script>
-                        function viewRideRequest(ride_id) {
+   
+   function confirmEnableAccount(userId) {
+    Swal.fire({
+      title: 'Enable Account',
+      input: 'text',
+      inputLabel: 'Reason for enabling',
+      inputPlaceholder: 'Enter your reason',
+      showCancelButton: true,
+      confirmButtonText: 'Enable',
+      cancelButtonText: 'Cancel',
+      preConfirm: (reason) => {
+        if (!reason) {
+          Swal.showValidationMessage('Reason is required');
+        }
+        return reason;
+      },
+    }).then((result) => {
+      if (!result.dismiss) {
+        enableAccount(userId, result.value);
+        window.location.reload()
+      }
+    });
+  }
+
+  // Function to show confirmation modal for disabling account
+  function confirmDisableAccount(userId) {
+    Swal.fire({
+      title: 'Disable Account',
+      input: 'text',
+      inputLabel: 'Reason for disabling',
+      inputPlaceholder: 'Enter your reason',
+      showCancelButton: true,
+      confirmButtonText: 'Disable',
+      cancelButtonText: 'Cancel',
+      preConfirm: (reason) => {
+        if (!reason) {
+          Swal.showValidationMessage('Reason is required');
+        }
+        return reason;
+      },
+    }).then((result) => {
+      if (!result.dismiss) {
+        disableAccount(userId, result.value);
+        window.location.reload()
+      }
+    });
+  }
+
+  // Function to send enable account request to the server
+  function enableAccount(userId, reason) {
+    fetch('/api/users/account/enable', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: userId,
+        reason: reason,
+      }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Account enabled:', data);
+      // Add any additional logic after enabling the account
+    })
+    .catch(error => {
+      console.error('Error enabling account:', error);
+    });
+  }
+
+  // Function to send disable account request to the server
+      function disableAccount(userId, reason) {
+        fetch('/api/users/account/disable', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId: userId,
+            reason: reason,
+          }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Account disabled:', data);
+          // Add any additional logic after disabling the account
+        })
+        .catch(error => {
+          console.error('Error disabling account:', error);
+        });
+      }
+
+                    </script>
+                    
+                    <script>
+
+                      
+                    const Users = <%- JSON.stringify(users, (key, value) => {
+                        if (key === 'car' || key === 'user') {
+                            return undefined;
+                        }
+                        return value;
+                    }) %>;
+
+                    console.log(Users)
+
+                        function viewUserRequest(ride_id) {
+
+                          const User =  Users.find(user => user.id === parseInt(ride_id))
+                          
                           Swal.fire({
-                                title: `User - ${ride_id}`,
+                            didOpen : () => {
+                              
+                              if(User.disabled) {
+                              
+                                document.getElementById('disable_enable').innerHTML = `
+                                <br><br>
+                                <div class="buttons">
+                                  <button class="button is-success" is-outlined onclick="confirmEnableAccount('${User.id}')">Enable Account</button>
+                                </div><br><br>` 
+                                 } else { 
+                                  <!-- Burn Account Button -->
+                                  document.getElementById('disable_enable').innerHTML = `
+                                  <br><br>
+                                     <div class="buttons">
+                                  <button class="button is-danger" onclick="confirmDisableAccount('${User.id}')">Disable Account</button>
+                                </div> <br><br>`
+                                 }
+                  
+                            },
+                        
                                 html : `
-                                <a class="button is-primary" href="tel:<%= users[i].phone %>"><i class="mdi mdi-phone"></i></a>
-                                <a class="button is-primary" href="mailto:<%= users[i].email %>"><i class="mdi mdi-email"></i></a>
-                                        `,
+
+                                <div class="container">
+                                  <div class="card">
+                                    <div class="card-content">
+                                      <div class="media">
+                                        <div class="media-left">
+                                          <figure class="image is-64x64">
+                                            <img src="${User.profileUrl}" alt="User Image">
+                                          </figure>
+                                        </div>
+                                        <div class="media-content">
+                                          <p class="title is-4">${User.name} ${User.surname}</p>
+                                          <p class="subtitle is-6"><i class="mdi mdi-cellphone"></i>${User.email}</p>
+                                        </div>
+                                      </div>
+
+                                      <div class="content">
+                                        <p><strong>ID:</strong>${User.id}</p>
+                                       
+                                        <p><strong>Is Disable ?:</strong> ${User.disabled}</p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                
+                                <div id="disable_enable">
+
+                              </div>
+
+                                <a style="width:100%" class="button is-primary" href="tel:${User.phone}"><i class="mdi mdi-phone"></i>${User.phone}</a>
+                                <br><br>
+                                <a style="width:100%" class="button is-primary" href="mailto:${User.email}"><i class="mdi mdi-email"></i>${User.email}</a>
+                                        
+                                
+                                `,
                                 icon: 'question',
                                 showCancelButton: true,
                                 confirmButtonColor: '#d33',
@@ -126,6 +286,7 @@
     </section>
     <!-- END Users -->
     <!-- CARS -->
+
     <section class="section">
       <div class="container">
         <div class="box">

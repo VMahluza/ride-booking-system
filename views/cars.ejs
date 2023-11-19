@@ -126,7 +126,7 @@
                             // Perform your delete operation here
                             Swal.fire('Deleted!', 'Your Car has been deleted.', 'success');
 
-                            setTimeout(()=> {console.log('Now deleting Ride!')}, 2000)
+                            setTimeout(()=> {console.log('Now deleting Ride!')}, 5000)
                             
                             fetch(
                                                             `/api/cars/delete/${plate}`, 
@@ -223,6 +223,64 @@
             <button class="modal-close is-large jb-modal-close" aria-label="close"></button>
         </div>
     </div>
+    
+    <style>
+        #snackbar {
+  visibility: hidden; /* Hidden by default. Visible on click */
+  min-width: 250px; /* Set a default minimum width */
+  margin-left: -125px; /* Divide value of min-width by 2 */
+  text-align: center; /* Centered text */
+  border-radius: 2px; /* Rounded borders */
+  padding: 16px; /* Padding */
+  position: fixed; /* Sit on top of the screen */
+  z-index: 1; /* Add a z-index if needed */
+  left: 50%; /* Center the snackbar */
+  bottom: 30px; /* 30px from the bottom */
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#snackbar.show {
+  visibility: visible; /* Show the snackbar */
+  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+  However, delay the fade out process for 2.5 seconds */
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+    </style>
+
+    <div id="snackbar">
+        <article class="message is-danger">
+            <div class="message-header">
+              <p>Fields Validation Error</p>
+              <button class="delete" aria-label="delete"></button>
+            </div>
+            <div id="snackbar-msg" class="message-body">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. <strong>Pellentesque risus mi</strong>, tempus quis placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et dictum <a>felis venenatis</a> efficitur. Aenean ac <em>eleifend lacus</em>, in mollis lectus. Donec sodales, arcu et sollicitudin porttitor, tortor urna tempor ligula, id porttitor mi magna a neque. Donec dui urna, vehicula et sem eget, facilisis sodales sem.
+            </div>
+          </article>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
@@ -233,18 +291,18 @@
             Swal.fire({
                 title: `Add Car`,
                 html: `         
-                    <form action="/api/cars" enctype="multipart/form-data" id="addCarForm" method="post" class="box">   
+                    <form id="adding_car_form" action="/api/cars" enctype="multipart/form-data" id="addCarForm" method="post" class="box">   
                         <div style="display:flex">
                             <div class="field" style="width:40%;margin:5px">    
                                 <label class="label">Vehicle Name</label>
                                 <div class="control">
-                                    <input class="input" type="text" name="name" id="name"  placeholder="Enter your car name">
+                                    <input class="input" type="text" name="name" id="name"  placeholder="Enter your car name" required>
                                 </div>
                             </div>
                             <div class="field" style="width:40%;margin:5px">    
                                 <label class="label">Vehicle Registration</label>
                                 <div class="control">
-                                    <input class="input" type="text" name="plate" id="plate"  placeholder="e.g XYZ 907 MP">
+                                    <input class="input" type="text" name="plate" id="plate"  placeholder="e.g XYZ 907 MP" required>
                                 </div>
                             </div>
                         </div>
@@ -252,7 +310,7 @@
                             <div class="field" style="width:40%;margin:5px">    
                                 <label class="label">Available Seats</label>
                                 <div class="control">
-                                    <input class="input" type="number" name="seats" id="seats" >
+                                    <input class="input" type="number" name="seats" id="seats" required >
                                 </div>
                             </div>
                         </div>
@@ -260,7 +318,7 @@
                             <div class="field" style=";margin:5px">    
                                 <label class="label">Condition</label>
                                 <div class="select" >
-                                    <select name='condition' id="condition">
+                                    <select name='condition' id="condition" required>
                                         <option>Select Car Condition:</option>
                                         <option value="Good">Good</option>
                                         <option value="Normal">Normal</option>
@@ -270,7 +328,7 @@
                             <div class="field" style=";margin:5px">   
                             <label class="label">Initial Destination Assignment</label>
                             <div class="select" >
-                            <select  name="destination_id" id="destination_id">
+                            <select  name="destination_id" id="destination_id" required>
                             <option value="">Select a location</option> 
                             <% for(var i=0; i<destination_locations.length; i++) { %>                                        
                                 <option value="<%= destination_locations[i].id %>"><%= destination_locations[i].name %>, <%= destination_locations[i].addressline1 %>, <%= destination_locations[i].addressline2 %></option>
@@ -289,7 +347,6 @@
                             </div>
                             </div>
                         </div>
-
                         <button id="submit" style="display:none" type="submit">Save</button>
                     </form>          
                 `,
@@ -297,10 +354,53 @@
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Save',
+                preConfirm : false,
                 width: '60%',
                 }).then((result) => {
                 if (result.isConfirmed) {
-                    document.getElementById('submit').click()
+
+                    const adding_car_formEl = document.getElementById('adding_car_form')
+
+                    var MissingFields = false;
+
+                    for (const el of adding_car_formEl.elements) {
+                       const { name, value } = el 
+                       if(name == 'carImage'){
+                        continue;
+                       } 
+
+                       if (value == '' || value == null || value.length == 0) {
+                              // Get the snackbar DIV
+                            var Toast = document.getElementById("snackbar");
+
+                            document.getElementById('snackbar-msg').innerText = "Some Fields are missing in the car form" + name
+
+                            // Add the "show" class to DIV
+                            Toast.className = "show";
+                            // After 3 seconds, remove the show class from DIV
+                            setTimeout(function(){ Toast.className = Toast.className.replace("show", ""); }, 5000);
+                            MissingFields = true;
+                        } else {
+                            document.getElementById('submit').click()
+                            MissingFields = false;
+                       }
+    
+                    }
+                    if (value == '' || value == null || value.length == 0) {
+                              // Get the snackbar DIV
+                            var Toast = document.getElementById("snackbar");
+                            document.getElementById('snackbar-msg').innerText = "Some Fields are missing in the car form" + name
+                            // Add the "show" class to DIV
+                            Toast.className = "show";
+                            // After 3 seconds, remove the show class from DIV
+                            setTimeout(function(){ Toast.className = Toast.className.replace("show", ""); }, 5000);
+                            MissingFields = true;
+                        } else {
+                            document.getElementById('submit').click()
+                            MissingFields = false;
+                       }
+                    setTimeout(() => {}, 10000)
+                    // document.getElementById('submit').click()
                 }
             })
         })
