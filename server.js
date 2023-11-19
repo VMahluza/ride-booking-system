@@ -6,26 +6,43 @@ const session = require("express-session");
 var logger = require("morgan");
 const bodyParser = require("body-parser");
 const crypto = require("crypto");
+const fs = require('fs');
 
 const multer = require("multer");
+
+
 const vehicle_storage = multer.diskStorage({
   destination : (req, file, cb) =>{
-    cb(null, 'public/images/vehicles')
+    const destinationFolder = 'public/images/vehicles';
+        // Check if the destination folder exists, create it if not
+      if (!fs.existsSync(destinationFolder)) {
+        fs.mkdirSync(destinationFolder, { recursive: true });
+      }
+    cb(null, destinationFolder)
   },
   filename:(req, file, cb)=>{
     console.log(file)
     cb(null, Date.now() + path.extname(file.originalname)); 
   }
 });
+
 const profile_storage = multer.diskStorage({
-  destination : (req, file, cb) =>{
-    cb(null, 'public/images/profiles')
+  destination: (req, file, cb) => {
+    const destinationFolder = 'public/images/profiles';
+    // Check if the destination folder exists, create it if not
+    if (!fs.existsSync(destinationFolder)) {
+      console.log('Creating destination folder:');
+      fs.mkdirSync(destinationFolder, { recursive: true });
+    }
+
+    cb(null, destinationFolder);
   },
-  filename:(req, file, cb)=>{
-    console.log(file)
-    cb(null, Date.now() + path.extname(file.originalname)); 
+  filename: (req, file, cb) => {
+    console.log(file);
+    cb(null, Date.now() + path.extname(file.originalname));
   }
 });
+
 
 const upload_car = multer({storage: vehicle_storage})
 const upload_profile_pic = multer({storage: profile_storage})
@@ -1131,7 +1148,7 @@ app.get("/api/users/:id", (req, res) => {
   }
 });
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 5000;
 
 app.use(function (req, res, next) {
   next(createError(404));
